@@ -21,7 +21,8 @@ class Robot {
     /** The material from which this robot is built. */
     private final Material material;
     
-    
+    // This scale is used to scale the entire robot
+    int[] totalScale = {1,1,1};
 
     /**
      * Constructs the robot with initial parameters.
@@ -38,8 +39,12 @@ class Robot {
      * Draws this robot (as a {@code stickfigure} if specified).
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, float tAnim) {
-        
     }
     
+    private void drawBody(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+    }
+    
+    private void drawLeg(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+    }
     
 }

@@ -4,6 +4,10 @@ import static com.jogamp.opengl.GL2.*;
 import static robotrace.ShaderPrograms.*;
 import static robotrace.Textures.*;
 
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.util.gl2.GLUT;
+
 /**
  * Handles all of the RobotRace graphics functionality,
  * which should be extended per the assignment.
@@ -71,6 +75,7 @@ public class RobotRace extends Base {
     /** Instance of the terrain. */
     private final Terrain terrain;
         
+    int tAnim = 0;
     /**
      * Constructs this robot race by initializing robots,
      * camera, track, and terrain.
@@ -207,8 +212,10 @@ public class RobotRace extends Base {
         gl.glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         
 
+        draw(tAnim);
+        tAnim++;
     // Draw hierarchy example.
-        drawHierarchy();
+        //drawHierarchy();
         
         // Draw the axis frame.
         if (gs.showAxes) {
@@ -261,6 +268,79 @@ public class RobotRace extends Base {
      * 
      * {@link #drawHierarchy()} -> {@link #drawSecond()} -> {@link #drawThird()}
      */
+    // This scale is used to scale the entire robot
+    int[] totalScale = {1,1,1};
+    
+    public void draw(float tAnim) {
+    	//Calc Position in circuit
+    	//Calc Rotation in circuit
+    	//gl.glScaled(totalScale[0], totalScale[1], totalScale[2]);
+        drawBody(tAnim);
+        drawLeg(tAnim, 1);
+        drawLeg(tAnim, -1);
+        drawArm(tAnim, 1);
+        drawArm(tAnim, -1);
+        drawHead(tAnim);
+    }
+    
+    private void drawBody(float tAnim) {
+    	gl.glPushMatrix(); 
+    	gl.glTranslated(0, 0, 1);
+        gl.glScaled(2, 1, 2);
+        glut.glutSolidCube(1);
+        gl.glScaled(0.5, 1, 0.5);
+        gl.glPopMatrix();
+    }
+    
+    private void drawLeg(float tAnim, int pos) {
+    	gl.glPushMatrix(); 
+    	// Draw first block
+    	gl.glColor3d(0.5, 0, 0);
+    	gl.glTranslated(0.5 * pos, 0, 0.5);
+    	drawBlock(tAnim, pos);
+        
+        // Draw second block
+    	gl.glColor3d(0, 0.5, 0);
+        drawBlock(tAnim, pos);
+        gl.glPopMatrix();
+    }
+    
+    private void drawArm(float tAnim, int pos) {
+    	gl.glPushMatrix(); 
+    	// Draw first block
+    	gl.glColor3d(0.5, 0, 0);
+    	gl.glTranslated(1.5 * pos, 0, 2.5);
+    	drawBlock(tAnim, -pos);
+        
+        // Draw second block
+    	gl.glColor3d(0, 0.5, 0);
+        drawBlock(tAnim, -pos);
+        gl.glPopMatrix();
+    }
+    
+    private void drawHead(float tAnim) {
+    	gl.glPushMatrix(); 
+    	gl.glTranslated(0, 0, 2.5);
+    	gl.glRotated(Math.sin(tAnim * 0.1) * 45.0, -90, 1, 0);
+    	//gl.glTranslated(0, 0, -0.5);
+    	gl.glScaled(1.2, 1.2, 1.2);
+    	glut.glutSolidCube(1);
+    	gl.glPopMatrix();
+    }
+    
+    private void drawBlock(float tAnim, int pos) {
+    	gl.glTranslated(0, 0, -0.5);
+    	gl.glRotated(pos * Math.sin(tAnim * 0.1) * 45.0, -90, 1, 0);
+    	gl.glTranslated(0, 0, -0.5);
+    	gl.glScaled(1, 1, 1);
+    	glut.glutSolidCube(1);
+    }
+    
+    
+    
+    
+    
+    /*
     private void drawHierarchy() {
         gl.glColor3d(gs.sliderC, gs.sliderD, gs.sliderE);
         gl.glPushMatrix(); 
@@ -269,6 +349,9 @@ public class RobotRace extends Base {
             gl.glScaled(1, 2, 2);
             gl.glTranslated(0.5, 0, 0);
             gl.glRotated(gs.sliderA * -90.0, 0, 1, 0);
+            gl.glTranslated(0.5, 0, 0);
+        	gl.glScaled(1, 0.5, 0.5);
+        	glut.glutSolidCube(1);
             drawSecond();
         gl.glPopMatrix();
     }
@@ -279,7 +362,7 @@ public class RobotRace extends Base {
         glut.glutSolidCube(1);
         gl.glScaled(1, 2, 2);
         gl.glTranslated(0.5, 0, 0);
-        gl.glRotated(gs.sliderB * -90.0, 0, 1, 0);
+        gl.glRotated(0, gs.sliderB * -90.0, 1, 0);
         drawThird();
     }
     
@@ -288,7 +371,7 @@ public class RobotRace extends Base {
         gl.glScaled(1, 0.5, 0.5);
         glut.glutSolidCube(1);
     }
-    
+    */
     
     /**
      * Main program execution body, delegates to an instance of
