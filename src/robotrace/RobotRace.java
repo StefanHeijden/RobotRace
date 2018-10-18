@@ -75,7 +75,7 @@ public class RobotRace extends Base {
     /** Instance of the terrain. */
     private final Terrain terrain;
         
-    int tAnim = 0;
+    double tAnim = 0;
     /**
      * Constructs this robot race by initializing robots,
      * camera, track, and terrain.
@@ -86,22 +86,22 @@ public class RobotRace extends Base {
         robots = new Robot[4];
         
         // Initialize robot 0
-        robots[0] = new Robot(Material.GOLD
+        robots[0] = new Robot(Material.GOLD, 0
                 
         );
         
         // Initialize robot 1
-        robots[1] = new Robot(Material.SILVER
+        robots[1] = new Robot(Material.SILVER, 1
               
         );
         
         // Initialize robot 2
-        robots[2] = new Robot(Material.WOOD
+        robots[2] = new Robot(Material.WOOD, 2
               
         );
 
         // Initialize robot 3
-        robots[3] = new Robot(Material.ORANGE
+        robots[3] = new Robot(Material.ORANGE, 3
                 
         );
         
@@ -211,10 +211,7 @@ public class RobotRace extends Base {
         
         gl.glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         
-
-        draw(tAnim);
-        tAnim++;
-    // Draw hierarchy example.
+        // Draw hierarchy example.
         //drawHierarchy();
         
         // Draw the axis frame.
@@ -223,11 +220,15 @@ public class RobotRace extends Base {
         }
         
         // Draw the (first) robot.
+        tAnim = 300 * gs.sliderA;
         gl.glUseProgram(robotShader.getProgramID()); 
-        
-        robots[0].draw(gl, glu, glut, 0);
-        
-        
+        robots[2].draw(gl, glu, glut, (float) tAnim);
+        /*
+        for(Robot r : robots) {
+        	r.draw(gl, glu, glut, (float) tAnim);
+        }
+        tAnim++;
+        */
         // Draw the race track.
         gl.glUseProgram(trackShader.getProgramID());
         raceTracks[gs.trackNr].draw(gl, glu, glut);
@@ -268,79 +269,7 @@ public class RobotRace extends Base {
      * 
      * {@link #drawHierarchy()} -> {@link #drawSecond()} -> {@link #drawThird()}
      */
-    // This scale is used to scale the entire robot
-    int[] totalScale = {1,1,1};
     
-    public void draw(float tAnim) {
-    	//Calc Position in circuit
-    	//Calc Rotation in circuit
-    	//gl.glScaled(totalScale[0], totalScale[1], totalScale[2]);
-        drawBody(tAnim);
-        drawLeg(tAnim, 1);
-        drawLeg(tAnim, -1);
-        drawArm(tAnim, 1);
-        drawArm(tAnim, -1);
-        drawHead(tAnim);
-    }
-    
-    private void drawBody(float tAnim) {
-    	gl.glPushMatrix(); 
-    	gl.glTranslated(0, 0, 1);
-        gl.glScaled(2, 1, 2);
-        glut.glutSolidCube(1);
-        gl.glScaled(0.5, 1, 0.5);
-        gl.glPopMatrix();
-    }
-    
-    private void drawLeg(float tAnim, int pos) {
-    	gl.glPushMatrix(); 
-    	// Draw first block
-    	gl.glColor3d(0.5, 0, 0);
-    	gl.glTranslated(0.5 * pos, 0, 0.5);
-    	drawBlock(tAnim, pos);
-        
-        // Draw second block
-    	gl.glColor3d(0, 0.5, 0);
-        drawBlock(tAnim, pos);
-        gl.glPopMatrix();
-    }
-    
-    private void drawArm(float tAnim, int pos) {
-    	gl.glPushMatrix(); 
-    	// Draw first block
-    	gl.glColor3d(0.5, 0, 0);
-    	gl.glTranslated(1.5 * pos, 0, 2.5);
-    	drawBlock(tAnim, -pos);
-        
-        // Draw second block
-    	gl.glColor3d(0, 0.5, 0);
-        drawBlock(tAnim, -pos);
-        gl.glPopMatrix();
-    }
-    
-    private void drawHead(float tAnim) {
-    	gl.glPushMatrix(); 
-    	gl.glTranslated(0, 0, 2.5);
-    	gl.glRotated(Math.sin(tAnim * 0.1) * 45.0, -90, 1, 0);
-    	//gl.glTranslated(0, 0, -0.5);
-    	gl.glScaled(1.2, 1.2, 1.2);
-    	glut.glutSolidCube(1);
-    	gl.glPopMatrix();
-    }
-    
-    private void drawBlock(float tAnim, int pos) {
-    	gl.glTranslated(0, 0, -0.5);
-    	gl.glRotated(pos * Math.sin(tAnim * 0.1) * 45.0, -90, 1, 0);
-    	gl.glTranslated(0, 0, -0.5);
-    	gl.glScaled(1, 1, 1);
-    	glut.glutSolidCube(1);
-    }
-    
-    
-    
-    
-    
-    /*
     private void drawHierarchy() {
         gl.glColor3d(gs.sliderC, gs.sliderD, gs.sliderE);
         gl.glPushMatrix(); 
@@ -371,7 +300,6 @@ public class RobotRace extends Base {
         gl.glScaled(1, 0.5, 0.5);
         glut.glutSolidCube(1);
     }
-    */
     
     /**
      * Main program execution body, delegates to an instance of
