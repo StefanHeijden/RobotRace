@@ -22,19 +22,21 @@ class Robot {
     private final Material material;
     
     // This scale is used to scale the entire robot
-    int[] totalScale = {1,1,1};
-    int[] startPosition = {-8,-20,0};
+    double[] totalScale = {1,1,1};
+    int[] startPosition = {-8,-20,-3};
     double runningSpeed = 0.1;
     int distanceBetweenRobots = 4;
     //body
-    int[] scaleBody = {2,1,2};
-    //arms
+    double[] scaleBody = {2,1,2};
+    double heigthTorso;
+    //arms and legs
     double[] scaleLimbs = {1,1,1};
     double limbMovementSpeed = 0.1;
     double limbAngle = 45.0;
     double armsAngleAmplifier = 0.5;
-    //legs
     //head
+    double[] scaleHead = {1.2,1.2,1.2};
+    double headAngle = 15.0;
 
     /**
      * Constructs the robot with initial parameters.
@@ -45,6 +47,8 @@ class Robot {
         this.material = material;
         this.startPosition[0] += startPosition * distanceBetweenRobots;
         
+    	// Calculate heigth of the body
+    	heigthTorso = scaleLimbs[2] * 1.5 + scaleBody[2] / 2;
     }
 
     /**
@@ -71,7 +75,7 @@ class Robot {
     	drawTotal(gl, glu, glut,tAnim);
     	
     	// Start drawing from the heigth of the legs
-    	gl.glTranslated(0, 0, 1);
+    	gl.glTranslated(0, 0, heigthTorso);
     	
     	// Scale so that the drawn cube looks like a body
         gl.glScaled(scaleBody[0], scaleBody[1], scaleBody[2]);
@@ -88,7 +92,7 @@ class Robot {
     	gl.glColor3d(0.5, 0, 0);
     	// Translate to point where the leg needs to be drawn
     	// whether its the left or right leg depends on pos
-    	gl.glTranslated(0.5 * pos, 0, 0.5);
+    	gl.glTranslated(scaleLimbs[0]/2 * pos, 0, scaleLimbs[2] * 2);
     	
     	// Draw first block of the leg
     	drawBlock(gl, glu, glut,tAnim, pos);
@@ -105,7 +109,7 @@ class Robot {
     	gl.glColor3d(0, 0.5, 0);
     	// Translate to point where the arm needs to be drawn
     	// whether its the left or right arm depends on pos
-    	gl.glTranslated(1.5 * pos, 0, 2.5);
+    	gl.glTranslated((scaleBody[0]/2 + scaleLimbs[0]/2) * pos, 0, heigthTorso + scaleLimbs[2]);
     	
     	// Draw first block of the arm. -pos is used since this makes the left arm move the
     	// same as the right leg and vice versa, creating a more natural running animation
@@ -122,10 +126,14 @@ class Robot {
     	drawTotal(gl, glu, glut,tAnim);
     	gl.glColor3d(0, 0, 0.5);
     	// Translate to point where the head needs to be drawn
-    	gl.glTranslated(0, 0, 2.2);
-    	gl.glRotated( Math.sin(tAnim * 0.1) * 45 - 100, -90, 1, 0);
+    	double lengthFromTorsoToNeck = (scaleBody[2] - 1)/2;
+    	gl.glTranslated(0, 0, heigthTorso + lengthFromTorsoToNeck + scaleHead[2]/2);
+    	
+    	gl.glRotated( -90 + Math.sin(tAnim * limbMovementSpeed) * headAngle , -90, 1, 0);
     	gl.glTranslated(0, 0.5, 0);
-    	gl.glScaled(1.2, 1.2, 1.2);
+    	
+    	// Scale with scale for the head and draw a cube
+    	gl.glScaled(scaleHead[0], scaleHead[1], scaleHead[2]);
     	glut.glutSolidCube(1);
     	gl.glPopMatrix();
     }
@@ -137,7 +145,7 @@ class Robot {
     	// Rotate the blocks of the limb based on the current tAnim
     	gl.glRotated(amplifier * Math.sin(tAnim * limbMovementSpeed) * limbAngle, -90, 1, 0);
     	
-    	// Move another halfway down the length of the limb. why?
+    	// Move another halfway down of the limb in the direction of the rotation
     	gl.glTranslated(0, 0, -scaleLimbs[2] / 2);
     	
     	// Scale the blocks of the limb, draw the cube and and undo the scaling for the next block
@@ -152,7 +160,7 @@ class Robot {
     	
     	// Move the robots based on the animation and track
     	gl.glTranslated(0, tAnim * runningSpeed, 0);
-    	//gl.glRotated(0.5 * -90.0, 0, 1, 0);
+    	//gl.glRotated(-0.4 * 90.0, -0.2 * 90.0, 1, 0);
     	
     	// Scale the robots
     	gl.glScaled(totalScale[0], totalScale[1], totalScale[2]);
