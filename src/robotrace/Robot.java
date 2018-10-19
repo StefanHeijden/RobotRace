@@ -23,20 +23,20 @@ class Robot {
     
     // This scale is used to scale the entire robot
     double[] totalScale = {1,1,1};
-    int[] startPosition = {-8,-20,-3};
-    double runningSpeed = 0.1;
+    int[] startPosition = {-8,-20,0};
+    double runningSpeed = 0.2;
     int distanceBetweenRobots = 4;
     //body
-    double[] scaleBody = {2,1,2};
+    double[] scaleBody = {0.5,0.25,0.5};
     double heigthTorso;
     //arms and legs
-    double[] scaleLimbs = {1,1,1};
+    double[] scaleLimbs = {0.25,0.25,0.25};
     double limbMovementSpeed = 0.1;
     double limbAngle = 45.0;
     double armsAngleAmplifier = 0.5;
     //head
-    double[] scaleHead = {1.2,1.2,1.2};
-    double headAngle = 15.0;
+    double[] scaleHead = {0.3,0.3,0.3};
+    double headAngle = 5.0;
 
     /**
      * Constructs the robot with initial parameters.
@@ -48,7 +48,7 @@ class Robot {
         this.startPosition[0] += startPosition * distanceBetweenRobots;
         
     	// Calculate heigth of the body
-    	heigthTorso = scaleLimbs[2] * 1.5 + scaleBody[2] / 2;
+    	heigthTorso = scaleLimbs[2] * 2 + scaleBody[2] / 2;
     }
 
     /**
@@ -92,7 +92,7 @@ class Robot {
     	gl.glColor3d(0.5, 0, 0);
     	// Translate to point where the leg needs to be drawn
     	// whether its the left or right leg depends on pos
-    	gl.glTranslated(scaleLimbs[0]/2 * pos, 0, scaleLimbs[2] * 2);
+    	gl.glTranslated(scaleLimbs[0]/2 * pos, 0, scaleLimbs[2] * 2.5);
     	
     	// Draw first block of the leg
     	drawBlock(gl, glu, glut,tAnim, pos);

@@ -6,6 +6,7 @@ import static robotrace.Textures.*;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 /**
@@ -219,16 +220,17 @@ public class RobotRace extends Base {
             drawAxisFrame();
         }
         
-        // Draw the (first) robot.
-        tAnim = 300 * gs.sliderA;
+        // Draw the robots.
         gl.glUseProgram(robotShader.getProgramID()); 
         robots[2].draw(gl, glu, glut, (float) tAnim);
-        /*
+        
         for(Robot r : robots) {
         	r.draw(gl, glu, glut, (float) tAnim);
         }
         tAnim++;
-        */
+        if(tAnim>120) {
+        	tAnim = 0;
+        }
         // Draw the race track.
         gl.glUseProgram(trackShader.getProgramID());
         raceTracks[gs.trackNr].draw(gl, glu, glut);
@@ -241,20 +243,65 @@ public class RobotRace extends Base {
         
     }
     
-    /**
-     * Draws the x-axis (red), y-axis (green), z-axis (blue),
-     * and origin (yellow).
-     */
+
     public void drawAxisFrame() {
+    	gl.glPushMatrix();
+    	gl.glColor3d(0.5, 0, 0);
+    	drawArrow(0,2,0, 0,0,0, 0.05);
+    	gl.glPopMatrix();
 
-    }
-    
-    /**
-     * Draws a single arrow
-     */
-    public void drawArrow() {  
+    	gl.glPushMatrix();
+    	gl.glColor3d(0, 0.5, 0);
+    	drawArrow(0,0,0, 2,0,0, 0.05);
+    	gl.glPopMatrix();
 
-    }
+    	gl.glPushMatrix();
+    	gl.glColor3d(0, 0, 0.5);
+    	drawArrow(0,0,0, 0,0,2, 0.05);
+    	gl.glPopMatrix();
+      }
+
+      /**
+       * Draws a single arrow between the points (x1,y1,z1) and (x2,y2,z2)
+       */
+	public void drawArrow(double x1, double x2, double y1, double y2, double z1, double z2, double D) {
+		// Calculate the vector between the 2 points
+		double x=x2-x1;
+		double y=y2-y1;
+		double z=z2-z1;
+		// The length of the vector between the 2 points
+		double L=Math.sqrt(x*x+y*y+z*z);
+		// To go from degrees to radius
+		double RADPERDEG = Math.PI/180;
+		// The object needed to draw each component of the arrow
+		GLUquadric drawing = glu.gluNewQuadric ();
+		// Start drawing
+		gl.glPushMatrix ();
+		//Start at first point
+		gl.glTranslated(x1,y1,z1);
+		//Rotate the arrow
+		if((x!=0.)||(y!=0.)) {
+			gl.glRotated(Math.atan2(y,x)/RADPERDEG,0.,0.,1.);
+			gl.glRotated(Math.atan2(Math.sqrt(x*x+y*y),z)/RADPERDEG,0.,1.,0.);
+		} else {
+			if (z<0){
+				gl.glRotated(180,1.,0.,0.);
+		}}
+		// Draw arrow shaft
+		glu.gluCylinder(drawing, D, D, L-4*D, 32, 1);
+		// Draw a disk on the start of the shaft
+		glu.gluDisk(drawing, 0.0, D, 32, 1);
+		// Go to the end of the shaft
+		gl.glTranslatef(0,0,(float) (L-4*D));
+		// Draw disk on the end of the shaft
+		glu.gluDisk(drawing, 0.0, 2*D, 32, 1);
+		// Draw arrow head
+		glu.gluCylinder(drawing, 2*D, 0.0, 4*D, 32, 1);
+		// Stop drawing
+		glu.gluDeleteQuadric(drawing);
+		gl.glPopMatrix ();
+	}
+
  
     /**
      * Drawing hierarchy example.
