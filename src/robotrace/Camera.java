@@ -1,5 +1,6 @@
 package robotrace;
 
+import com.jogamp.opengl.glu.GLU;
 /**
  * Implementation of a camera with a position and orientation. 
  */
@@ -18,7 +19,7 @@ class Camera {
      * Updates the camera viewpoint and direction based on the
      * selected camera mode.
      */
-    public void update(GlobalState gs, Robot focus) {
+    public void update(GlobalState gs, Robot focus, GLU glu) {
 
         switch (gs.camMode) {
             
@@ -29,15 +30,16 @@ class Camera {
                 
             // Default mode    
             default:
-                setDefaultMode(gs);
+                setDefaultMode(gs, glu);
         }
     }
 
     /**
      * Computes eye, center, and up, based on the camera's default mode.
      */
-    private void setDefaultMode(GlobalState gs) {
-        
+    private void setDefaultMode(GlobalState gs, GLU glu) {
+        glu.gluLookAt(gs.cnt.x - gs.vDist * gs.theta, gs.cnt.y - gs.vDist * gs.phi, 0.0, 0.0, 0.0, -gs.vDist, 0.0, 0.0, 1.0);
+
     }
 
     /**
