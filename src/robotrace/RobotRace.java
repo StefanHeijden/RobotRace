@@ -222,11 +222,15 @@ public class RobotRace extends Base {
         
         // Draw the robots.
         gl.glUseProgram(robotShader.getProgramID()); 
-        robots[2].draw(gl, glu, glut, (float) tAnim);
         
         for(Robot r : robots) {
+        	gl.glUseProgram(robotShader.getProgramID());
+        	
+        	robotShader.setUniform(gl, "shininess", r.shininess);
+        	
         	r.draw(gl, glu, glut, (float) tAnim);
         }
+         
         tAnim++;
         if(tAnim>120) {
         	tAnim = 0;
@@ -243,7 +247,6 @@ public class RobotRace extends Base {
         
     }
     
-
     public void drawAxisFrame() {
     	gl.glPushMatrix();
     	gl.glColor3d(0.5, 0, 0);
@@ -259,6 +262,7 @@ public class RobotRace extends Base {
     	gl.glColor3d(0, 0, 0.5);
     	drawArrow(0,0,0, 0,0,2, 0.05);
     	gl.glPopMatrix();
+    	gl.glColor3d(0, 0, 0);
       }
 
       /**

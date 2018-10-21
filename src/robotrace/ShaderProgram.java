@@ -86,6 +86,7 @@ public class ShaderProgram {
     
     public void setUniform(GL2 gl, String uniformName, float value) {
         int uniform = gl.glGetUniformLocationARB(programID, uniformName);
+        System.out.println("program: " + programID + " uniform:" + uniformName + " " + uniform);
         if (uniform == -1) {
             System.err.format("missing uniform \"%s\"\n", uniformName);
         } else {

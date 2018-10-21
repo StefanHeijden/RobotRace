@@ -11,9 +11,7 @@ public class ParametricTrack extends RaceTrack {
     	double x = 10 * Math.cos(2 * Math.PI * t);
     	double y = 14 * Math.sin(2 * Math.PI * t);
     	double z = 1;
-    	//System.out.println(new Vector(x,y,z));
         return new Vector(x,y,z);
-
     }
 
     @Override
@@ -21,7 +19,9 @@ public class ParametricTrack extends RaceTrack {
     	double x = 20 * Math.PI * Math.sin(2 * Math.PI * t);
     	double y = 28 * Math.PI * Math.cos(2 * Math.PI * t);
     	double z = 0;
-        return Vector.O;
+    	Vector v = new Vector(x,y,z);
+    	v = v.normalized();
+    	return v;
 
     }
     

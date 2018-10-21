@@ -20,12 +20,15 @@ class Robot {
 
     /** The material from which this robot is built. */
     private final Material material;
-    
+	float[] diffuse ;
+	float[] specular;
+	float shininess;
+	
     // This scale is used to scale the entire robot
     double[] totalScale = {1,1,1};
     int[] startPosition = {-8,-20,0};
     double runningSpeed = 0.2;
-    int distanceBetweenRobots = 4;
+    double distanceBetweenRobots = 1.22;
     //body
     double[] scaleBody = {0.5,0.25,0.5};
     double heigthTorso;
@@ -45,6 +48,11 @@ class Robot {
             
     ) {
         this.material = material;
+    	// Set material color for robot
+    	diffuse = material.diffuse;
+    	specular = material.specular;
+    	shininess = material.shininess;
+    	
         this.startPosition[0] += startPosition * distanceBetweenRobots;
         
     	// Calculate heigth of the body
@@ -55,6 +63,7 @@ class Robot {
      * Draws this robot (as a {@code stickfigure} if specified).
      */
     public void draw(GL2 gl, GLU glu, GLUT glut, float tAnim) {
+    	
     	// Draw each body part separate. start with the body
         drawBody(gl, glu, glut, tAnim);
         // Draw the right leg
