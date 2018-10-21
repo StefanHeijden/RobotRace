@@ -225,9 +225,9 @@ public class RobotRace extends Base {
         
         for(Robot r : robots) {
         	gl.glUseProgram(robotShader.getProgramID());
-        	
+        	/*
         	robotShader.setUniform(gl, "shininess", r.shininess);
-        	
+        	*/
         	r.draw(gl, glu, glut, (float) tAnim);
         }
          
