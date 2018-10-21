@@ -67,6 +67,7 @@ class Robot {
         drawArm(gl, glu, glut,tAnim, -1);
         // Draw the head
         drawHead(gl, glu, glut,tAnim);
+
     }
     
     private void drawBody(GL2 gl, GLU glu, GLUT glut, float tAnim) {

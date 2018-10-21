@@ -1,6 +1,8 @@
 package robotrace;
 
 import com.jogamp.opengl.glu.GLU;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 /**
  * Implementation of a camera with a position and orientation. 
  */
@@ -38,7 +40,14 @@ class Camera {
      * Computes eye, center, and up, based on the camera's default mode.
      */
     private void setDefaultMode(GlobalState gs, GLU glu) {
-        glu.gluLookAt(gs.cnt.x - gs.vDist * gs.theta, gs.cnt.y - gs.vDist * gs.phi, 0.0, 0.0, 0.0, -gs.vDist, 0.0, 0.0, 1.0);
+        double xCam = gs.cnt.x - (gs.vDist * sin(gs.theta));
+        double yCam = gs.cnt.y - (gs.vDist * cos(gs.phi));
+        double zCam = gs.vDist;
+        double xCentralPoint = gs.cnt.x;
+        double yCentralPoint = gs.cnt.y;
+        double zCentralPoint = gs.cnt.z;
+       
+        glu.gluLookAt(xCam, yCam, zCam, xCentralPoint, yCentralPoint, zCentralPoint, 0.0f, 0.0f, 1.0f);
 
     }
 

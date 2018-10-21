@@ -265,7 +265,7 @@ public class RobotRace extends Base {
        * Draws a single arrow between the points (x1,y1,z1) and (x2,y2,z2)
        */
 	public void drawArrow(double x1, double x2, double y1, double y2, double z1, double z2, double D) {
-		// Calculate the vector between the 2 points
+		//Calculate the vector between the 2 points
 		double x=x2-x1;
 		double y=y2-y1;
 		double z=z2-z1;
