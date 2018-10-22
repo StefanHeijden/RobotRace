@@ -1,8 +1,8 @@
 package robotrace;
 
 import com.jogamp.opengl.glu.GLU;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
+import static java.lang.Math.*;
+
 /**
  * Implementation of a camera with a position and orientation. 
  */
@@ -27,7 +27,7 @@ class Camera {
             
             // First person mode    
             case 1:
-                setFirstPersonMode(gs, focus);
+                setFirstPersonMode(gs, focus, glu);
                 break;
                 
             // Default mode    
@@ -40,22 +40,28 @@ class Camera {
      * Computes eye, center, and up, based on the camera's default mode.
      */
     private void setDefaultMode(GlobalState gs, GLU glu) {
-        double xCam = gs.cnt.x - (gs.vDist * sin(gs.theta));
+       /* double xCam = gs.cnt.x - (gs.vDist * sin(gs.theta));
         double yCam = gs.cnt.y - (gs.vDist * cos(gs.phi));
-        double zCam = gs.vDist;
+        double zCam = gs.vDist;*/
+        //double xCam = gs.cnt.x + gs.vDist * cos(gs.phi);
+        
+        double xCam = gs.cnt.x + gs.vDist * cos(gs.theta) * sin(gs.phi);
+        double yCam = gs.cnt.y + gs.vDist * sin(gs.theta) * sin(gs.phi);
+        double zCam = gs.cnt.z + gs.vDist * cos(gs.phi);
         double xCentralPoint = gs.cnt.x;
         double yCentralPoint = gs.cnt.y;
         double zCentralPoint = gs.cnt.z;
-       
-        glu.gluLookAt(xCam, yCam, zCam, xCentralPoint, yCentralPoint, zCentralPoint, 0.0f, 0.0f, 1.0f);
-
+        
+        glu.gluLookAt(xCam, yCam, zCam, 
+                xCentralPoint, yCentralPoint, zCentralPoint, 
+                0.0, 0.0, 1.0);
     }
 
     /**
      * Computes eye, center, and up, based on the first person mode.
      * The camera should view from the perspective of the robot.
      */
-    private void setFirstPersonMode(GlobalState gs, Robot focus) {
-
+    private void setFirstPersonMode(GlobalState gs, Robot focus, GLU glu) {
+        
     }
 }
