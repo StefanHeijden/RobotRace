@@ -100,7 +100,7 @@ public class RobotRace extends Base {
         robots[2] = new Robot(Material.WOOD, 2
               
         );
-
+        
         // Initialize robot 3
         robots[3] = new Robot(Material.ORANGE, 3
                 
@@ -149,7 +149,7 @@ public class RobotRace extends Base {
 	    // Normalize normals.
         gl.glEnable(GL_NORMALIZE);
         
-	// Try to load four textures, add more if you like in the Textures class         
+        // Try to load four textures, add more if you like in the Textures class         
         Textures.loadTextures();
         reportError("reading textures");
         
@@ -220,16 +220,15 @@ public class RobotRace extends Base {
             drawAxisFrame();
         }
         
+
         // Draw the robots.
-        gl.glUseProgram(robotShader.getProgramID()); 
-        
         for(Robot r : robots) {
-        	gl.glUseProgram(robotShader.getProgramID());
-        	/*
-        	robotShader.setUniform(gl, "shininess", r.shininess);
-        	*/
-        	r.draw(gl, glu, glut, (float) tAnim);
+            gl.glUseProgram(robotShader.getProgramID());
+            r.draw(gl, glu, glut, (float) tAnim);
         }
+        
+        // Some test drawing for using GL_Rotate
+        //drawTesty();
          
         tAnim++;
         if(tAnim>120) {
@@ -243,7 +242,6 @@ public class RobotRace extends Base {
         gl.glUseProgram(terrainShader.getProgramID());
         terrain.draw(gl, glu, glut);
         reportError("terrain:");
-        
         
     }
     
@@ -350,6 +348,12 @@ public class RobotRace extends Base {
         gl.glTranslated(0.5, 0, 0);
         gl.glScaled(1, 0.5, 0.5);
         glut.glutSolidCube(1);
+    }
+    
+    private void drawTesty() {
+    	gl.glRotated(gs.sliderA * 360, gs.sliderB * 360, gs.sliderC * 360, gs.sliderD * 360);
+    	gl.glScaled(1, 2, 3);
+    	glut.glutSolidCube(1);
     }
     
     /**

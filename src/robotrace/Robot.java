@@ -166,8 +166,10 @@ class Robot {
     	gl.glTranslated(startPosition[0], startPosition[1], startPosition[2]);
     	
     	// Move the robots based on the animation and track
+    	//gl.glTranslated(position.x, position.y, position.z);
     	gl.glTranslated(0, tAnim * runningSpeed, 0);
-    	//gl.glRotated(-0.4 * 90.0, -0.2 * 90.0, 1, 0);
+    	gl.glRotated( Math.sin(tAnim * 0.01) * 360, 0,0, Math.sin(tAnim * 0.01) * 360);
+    	//gl.glRotated(Math.sin(tAnim * 0.1) * 15, 90, -0, 0);
     	
     	// Scale the robots
     	gl.glScaled(totalScale[0], totalScale[1], totalScale[2]);
