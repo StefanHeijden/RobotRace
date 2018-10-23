@@ -65,14 +65,21 @@ class Camera {
      * The camera should view from the perspective of the robot.
      */
     private void setFirstPersonMode(GlobalState gs, Robot focus) {
+        Vector yAxis = new Vector(0,1,0); 
+        //Calculate angle between Yaxis and the direction
+        double angle = Math.acos(yAxis.dot(focus.direction)/(yAxis.length() * focus.direction.length()));
+        // Turn angle from radians to degree
+        angle = angle / Math.PI * 180;
+        
+        
         //focus.position is a vector which gives the position of the robot
         double posRobotx = focus.position.x;
         double posRoboty = focus.position.y;
-        double posRobotz = focus.position.z;
+        double posRobotz = focus.position.z + 2;
         
         //focus.direction is a vector which gives the direction the robot faces
-        double lookRobotx = focus.direction.x;
-        double lookRoboty = focus.direction.y;
+        double lookRobotx = focus.direction.x + gs.vDist * cos(gs.theta);
+        double lookRoboty = focus.direction.y + gs.vDist * sin(gs.phi);
         double lookRobotz = focus.direction.z;
         
         
