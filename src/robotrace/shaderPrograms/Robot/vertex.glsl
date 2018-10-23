@@ -1,13 +1,13 @@
 // simple vertex shader
 #version 120
 
-float diffuseX = 0.75164f;
-float diffuseY = 0.60648f;
-float diffuseZ = 0.22648f;
-float specularX = 0.628281f;
-float specularY = 0.555802f;
-float specularZ = 0.366065f;
-float shininess = 51.2f;
+uniform float diffuseX;
+uniform float diffuseY;
+uniform float diffuseZ;
+uniform float specularX;
+uniform float specularY;
+uniform float specularZ;
+uniform float shininess;
 
 vec4 shading(vec3 P, vec3 N) {
     vec4 result = vec4(0,0,0,1); // opaque black

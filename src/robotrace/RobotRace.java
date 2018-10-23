@@ -224,6 +224,15 @@ public class RobotRace extends Base {
         // Draw the robots.
         for(Robot r : robots) {
             gl.glUseProgram(robotShader.getProgramID());
+            
+            robotShader.setUniform(gl,"diffuseX", r.diffuse[0]);
+            robotShader.setUniform(gl,"diffuseY", r.diffuse[1]);
+            robotShader.setUniform(gl,"diffuseZ", r.diffuse[2]);
+            robotShader.setUniform(gl,"specularX", r.specular[0]);
+            robotShader.setUniform(gl,"specularY", r.specular[1]);
+            robotShader.setUniform(gl,"specularZ", r.specular[3]);
+            robotShader.setUniform(gl,"shininess", r.shininess);
+            
             r.draw(gl, glu, glut, (float) tAnim);
         }
         
