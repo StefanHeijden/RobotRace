@@ -65,14 +65,17 @@ class Camera {
      * The camera should view from the perspective of the robot.
      */
     private void setFirstPersonMode(GlobalState gs, Robot focus) {
+        if (gs.tAnim > 5) {
+            gs.tAnim = gs.tAnim-6;
+        }     
         //focus.position is a vector which gives the position of the robot
-        double posRobotx = focus.position.x;
-        double posRoboty = focus.position.y;
+        double posRobotx = focus.position.x;//+ gs.tAnim * 2;
+        double posRoboty = focus.position.y + gs.tAnim * 2;
         double posRobotz = focus.position.z;
         
         //focus.direction is a vector which gives the direction the robot faces
-        double lookRobotx = focus.direction.x;
-        double lookRoboty = focus.direction.y;
+        double lookRobotx = focus.direction.x + cos(gs.theta * gs.tAnim) * cos(gs.phi * gs.tAnim);
+        double lookRoboty = focus.direction.y + sin(gs.theta * gs.tAnim) * cos(gs.phi * gs.tAnim);
         double lookRobotz = focus.direction.z;
         
         
