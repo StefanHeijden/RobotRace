@@ -13,10 +13,10 @@ import static com.jogamp.opengl.fixedfunc.GLLightingFunc.*;
 class Robot {
     
     /** The position of the robot. */
-    public Vector position = new Vector(0, 0, 0);
+    public Vector position = new Vector(-8, -20, 2);
     
     /** The direction in which the robot is running. */
-    public Vector direction = new Vector(1, 0, 0);
+    public Vector direction = new Vector(0, 0, 0);
 
     /** The material from which this robot is built. */
     private final Material material;
@@ -24,7 +24,7 @@ class Robot {
 	float[] specular;
 	float shininess;
 	
-    // This scale is used to scale the entire robot
+    // This scale is used to scale   the entire robot
     double[] totalScale = {1,1,1};
     int[] startPosition = {-8,-20,0};
     double runningSpeed = 0.2;
