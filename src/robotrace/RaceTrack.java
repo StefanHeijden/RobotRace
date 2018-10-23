@@ -34,8 +34,13 @@ abstract class RaceTrack {
      * Returns the center of a lane at 0 <= t < 1.
      * Use this method to find the position of a robot on the track.
      */
-    public Vector getLanePoint(int lane, double t){
-
+    public Vector getLanePoint(int lane, double t, int indexRobot){
+        if(lane == 0) 
+        {
+            Vector v = getPoint(t);
+            return new Vector(v.x * (10 +  indexRobot * laneWidth), 
+                    v.y * (14 +  indexRobot * laneWidth), v.z);
+        }
         return Vector.O;
 
     }

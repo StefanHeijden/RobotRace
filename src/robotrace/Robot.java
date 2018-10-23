@@ -26,15 +26,14 @@ class Robot {
 	
     // This scale is used to scale the entire robot
     double[] totalScale = {1,1,1};
-    int[] startPosition = {-8,-20,0};
-    double runningSpeed = 0.2;
-    double distanceBetweenRobots = 1.22;
+    public int indexRobot;
+    public double runningSpeed;
+    double limbMovementSpeed = 100.0;
     //body
     double[] scaleBody = {0.5,0.25,0.5};
     double heigthTorso;
     //arms and legs
     double[] scaleLimbs = {0.25,0.25,0.25};
-    double limbMovementSpeed = 0.1;
     double limbAngle = 45.0;
     double armsAngleAmplifier = 0.5;
     //head
@@ -44,19 +43,31 @@ class Robot {
     /**
      * Constructs the robot with initial parameters.
      */
-    public Robot(Material material, int startPosition
-            
+    public Robot(Material material, int index
     ) {
         this.material = material;
     	// Set material color for robot
     	diffuse = material.diffuse;
     	specular = material.specular;
     	shininess = material.shininess;
-    	
-        this.startPosition[0] += startPosition * distanceBetweenRobots;
-        
+        indexRobot = index;
+        runningSpeed = calcMovementSpeed();
     	// Calculate heigth of the body
     	heigthTorso = scaleLimbs[2] * 2 + scaleBody[2] / 2;
+    }
+    
+    private double calcMovementSpeed()
+    {
+        if(indexRobot == 1) {
+            return 0.0025;
+        }
+        if(indexRobot == 2) {
+            return 0.0030;
+        }
+        if(indexRobot == 3) {
+            return 0.0035;
+        }
+        return 0.002;
     }
 
     /**
@@ -162,14 +173,25 @@ class Robot {
     }
     
     private void drawTotal(GL2 gl, GLU glu, GLUT glut, float tAnim) {
-    	// Put the robot on its start position
-    	gl.glTranslated(startPosition[0], startPosition[1], startPosition[2]);
-    	
-    	// Move the robots based on the animation and track
-    	//gl.glTranslated(position.x, position.y, position.z);
-    	gl.glTranslated(0, tAnim * runningSpeed, 0);
-    	gl.glRotated( Math.sin(tAnim * 0.01) * 360, 0,0, Math.sin(tAnim * 0.01) * 360);
-    	//gl.glRotated(Math.sin(tAnim * 0.1) * 15, 90, -0, 0);
+    	// Put the robot on its position
+    	gl.glTranslated(position.x, position.y, position.z);
+        //Calculate the rotation for the robot
+        Vector yAxis = new Vector(0,1,0); 
+        //Calculate angle between Yaxis and the direction
+        double angle = Math.acos(yAxis.dot(direction)/(yAxis.length() * direction.length()));
+        // Turn angle from radians to degree
+        angle = angle / Math.PI * 180;
+        
+        if(direction.x >= 0) 
+        {
+            gl.glRotated( angle, 0,0, 90);
+        }else 
+        {
+            gl.glRotated( 360 - angle, 0,0, 90);
+        }
+        // Make the robots move back and forth a bit while running
+        // Just to make animations little smoother
+    	gl.glRotated(Math.sin(tAnim * limbMovementSpeed) * 15, 90, -0, 0);
     	
     	// Scale the robots
     	gl.glScaled(totalScale[0], totalScale[1], totalScale[2]);

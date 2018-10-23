@@ -87,22 +87,22 @@ public class RobotRace extends Base {
         robots = new Robot[4];
         
         // Initialize robot 0
-        robots[0] = new Robot(Material.GOLD, 0
+        robots[0] = new Robot(Material.GOLD, 0 
                 
         );
         
         // Initialize robot 1
-        robots[1] = new Robot(Material.SILVER, 1
+        robots[1] = new Robot(Material.SILVER, 1 
               
         );
         
         // Initialize robot 2
-        robots[2] = new Robot(Material.WOOD, 2
+        robots[2] = new Robot(Material.WOOD, 2 
               
         );
         
         // Initialize robot 3
-        robots[3] = new Robot(Material.ORANGE, 3
+        robots[3] = new Robot(Material.ORANGE, 3 
                 
         );
         
@@ -224,7 +224,7 @@ public class RobotRace extends Base {
         // Draw the robots.
         for(Robot r : robots) {
             gl.glUseProgram(robotShader.getProgramID());
-            
+            // Set all material values from the robot for the shaderprogram
             robotShader.setUniform(gl,"diffuseX", r.diffuse[0]);
             robotShader.setUniform(gl,"diffuseY", r.diffuse[1]);
             robotShader.setUniform(gl,"diffuseZ", r.diffuse[2]);
@@ -232,17 +232,18 @@ public class RobotRace extends Base {
             robotShader.setUniform(gl,"specularY", r.specular[1]);
             robotShader.setUniform(gl,"specularZ", r.specular[3]);
             robotShader.setUniform(gl,"shininess", r.shininess);
-            
-            r.draw(gl, glu, glut, (float) tAnim);
+            // Set position and direction based on the track
+            r.position = raceTracks[gs.trackNr].getLanePoint(gs.trackNr, tAnim * r.runningSpeed, r.indexRobot);
+            r.direction =  raceTracks[gs.trackNr].getTangent(tAnim * r.runningSpeed);
+            r.draw(gl, glu, glut, (float) (tAnim * r.runningSpeed));
         }
+        // Increase tAnim
+        tAnim++;
         
         // Some test drawing for using GL_Rotate
         //drawTesty();
          
-        tAnim++;
-        if(tAnim>120) {
-        	tAnim = 0;
-        }
+        
         // Draw the race track.
         gl.glUseProgram(trackShader.getProgramID());
         raceTracks[gs.trackNr].draw(gl, glu, glut);
